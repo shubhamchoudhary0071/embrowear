@@ -1,0 +1,3 @@
+"Task Name","Description","Priority","Phase","Tags"
+"Set Up Staging Environment","Create a staging site for final testing before going live.","High","Deployment","Deployment"
+"Go-Live","Launch the platform on the production server and monitor for issues.","High","Deployment","Deployment"

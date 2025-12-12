@@ -1,0 +1,5 @@
+"Task Name","Description","Priority","Phase","Tags"
+"Conduct Functional Testing","Test all features and edge cases to ensure everything works as expected.","High","Testing","Testing"
+"Perform Performance Testing","Conduct load testing for peak traffic and optimize page load times (aim for under 2 seconds).","High","Testing","Testing"
+"Carry Out Usability Testing","Gather user feedback to identify pain points and iterate on the design.","High","Testing","Testing"
+"Ensure Security Testing","Perform penetration testing and ensure compliance with GDPR, CCPA, etc.","High","Testing","Testing"
