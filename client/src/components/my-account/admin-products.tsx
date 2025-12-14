@@ -474,7 +474,7 @@ const AdminProducts: React.FC = () => {
                   onClick={addCategory}
                   className="px-4 py-3 bg-gray-800 text-white hover:bg-gray-900 transition-colors"
                 >
-                  <Plus className="h-4 h-4" />
+                  <Plus className="h-4" />
                 </button>
               </div>
 
