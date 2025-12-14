@@ -1,4 +1,5 @@
-import { Bell, CreditCard, Gift, Heart, LogOut, MapPin, Package, Palette, Plus, Settings, Shield, Star, User } from 'lucide-react'
+import { Bell, CreditCard, Gift, Heart, LogOut, MapPin, Package,  Plus, Settings, Shield, Star, User } from 'lucide-react'
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 interface Props{
@@ -8,6 +9,7 @@ interface Props{
 
 const Sidebar = ({ activeTab, setActiveTab }: Props) => {
   const isAdmin = true;
+  const router=useRouter();
 
   const menuItems = [
     { id: 'overview', icon: User, label: 'Account Overview' },
@@ -15,7 +17,7 @@ const Sidebar = ({ activeTab, setActiveTab }: Props) => {
     { id: 'wishlist', icon: Heart, label: 'Wishlist' },
     { id: 'addresses', icon: MapPin, label: 'Addresses' },
     { id: 'payment', icon: CreditCard, label: 'Payment Methods' },
-    { id: 'customize', icon: Palette, label: 'T-Shirt Designer' },
+    // { id: 'customize', icon: Palette, label: 'T-Shirt Designer' },
     { id: 'loyalty', icon: Gift, label: 'Loyalty Program' },
     { id: 'reviews', icon: Star, label: 'My Reviews' },
     { id: 'notifications', icon: Bell, label: 'Notifications' },
@@ -68,7 +70,9 @@ const Sidebar = ({ activeTab, setActiveTab }: Props) => {
           
           {/* Sign Out Button */}
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <button className="w-full flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-left text-red-600 hover:bg-red-50 transition-colors">
+            <button
+            onClick={()=>router.push("/login")}
+             className="w-full flex items-center space-x-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-left text-red-600 hover:bg-red-50 transition-colors">
               <LogOut className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium">Sign Out</span>
             </button>

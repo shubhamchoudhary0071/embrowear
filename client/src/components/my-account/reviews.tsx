@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { Star, ThumbsUp, ThumbsDown, Edit, Trash2, Share2 } from 'lucide-react'
+import { Star, ThumbsUp, ThumbsDown } from 'lucide-react'
 
 const ReviewSection = () => {
   const [reviews, setReviews] = useState([
@@ -50,25 +50,7 @@ const ReviewSection = () => {
     }))
   }
 
-  const renderStars = (rating:number) => {
-    const fullStars = Math.floor(rating)
-    const hasHalfStar = rating % 1 !== 0
-    const emptyStars = 5 - Math.ceil(rating)
 
-    return (
-      <div className="flex items-center gap-1">
-        {[...Array(fullStars)].map((_, i) => (
-          <Star key={i} className="h-4 w-4 fill-current text-yellow-400" />
-        ))}
-        {hasHalfStar && (
-          <Star className="h-4 w-4 fill-current text-yellow-400 opacity-50" />
-        )}
-        {[...Array(emptyStars)].map((_, i) => (
-          <Star key={i} className="h-4 w-4 text-gray-300" />
-        ))}
-      </div>
-    )
-  }
 
   const renderEmptyStars = () => {
     return (

@@ -1,10 +1,12 @@
 "use client"
 import { Menu, Search, ShoppingBag, User, X, ChevronDown } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const router=useRouter();
 
   const navigationItems = [
     {
@@ -56,11 +58,11 @@ const Header = () => {
   const EagleLogo = () => (
     <div className="flex items-center space-x-2 group cursor-pointer">
       <div className="relative">
-        <div className="h-8 w-12  rounded flex items-center justify-center  transition-all duration-300">
+        <div className="h-8 w-12  rounded flex items-center justify-center  transition-all duration-300" onClick={()=>router.push("/")}>
           <img src="/logos/without-bg/logo.png" className="text-white font-bold text-sm"/>
         </div>
       </div>
-      <div className="hidden sm:block">
+      <div className="hidden sm:block" onClick={()=>router.push("/")}>
         <h1 className="text-lg lg:text-xl font-black text-slate-800 tracking-tight leading-tight">
           EMBROWEAR
         </h1>
@@ -86,9 +88,11 @@ const Header = () => {
                 className="relative group"
                 onMouseEnter={() => setActiveDropdown(item.name)}
                 onMouseLeave={() => setActiveDropdown(null)}
+                  onClick={()=>router.push("/product-category")}
+
               >
-                <a
-                  href="#"
+                <div
+                  onClick={()=>router.push("/product-category")}
                   className="relative px-3 py-2 text-slate-700 hover:text-slate-900 text-sm font-bold transition-all duration-200 flex items-center gap-1 rounded hover:bg-slate-50"
                 >
                   <span className="relative">
@@ -98,7 +102,7 @@ const Header = () => {
                   {item.submenu.length > 0 && (
                     <ChevronDown className="h-3 w-3 text-slate-500 transition-transform duration-200 group-hover:rotate-180" />
                   )}
-                </a>
+                </div>
 
                 {/* Dropdown Menu */}
                 {item.submenu.length > 0 && activeDropdown === item.name && (
@@ -107,7 +111,7 @@ const Header = () => {
                       <h3 className="font-bold text-slate-800 text-sm">{item.name}</h3>
                     </div>
                     <div className="py-1 max-h-80 overflow-y-auto">
-                      {item.submenu.map((subItem, index) => (
+                      {item.submenu.map((subItem) => (
                         <a
                           key={subItem}
                           href="#"
@@ -135,7 +139,7 @@ const Header = () => {
             </button>
             
             {/* User Icon */}
-            <button className="group p-1.5 rounded hover:bg-slate-100 transition-all duration-200">
+            <button className="group p-1.5 rounded hover:bg-slate-100 transition-all duration-200" onClick={()=>router.push('/my-account')}>
               <User className="h-5 w-5 text-slate-600 group-hover:text-slate-800 transition-colors" />
             </button>
             
@@ -166,9 +170,8 @@ const Header = () => {
           <div className="lg:hidden border-t border-slate-200 bg-white/95 backdrop-blur-sm">
             <div className="px-2 pt-2 pb-4 space-y-1">
               {navigationItems.map((item) => (
-                <div key={item.name} className="rounded overflow-hidden">
-                  <a
-                    href="#"
+                <div key={item.name} className="rounded overflow-hidden" onClick={()=>router.push("/product-category")}>
+                  <div
                     className="flex items-center justify-between px-3 py-2.5 text-slate-700 hover:text-slate-900 hover:bg-slate-50 text-sm font-bold transition-all duration-200 rounded"
                     onClick={(e) => {
                       if (item.submenu.length > 0) {
@@ -187,7 +190,7 @@ const Header = () => {
                         }`} 
                       />
                     )}
-                  </a>
+                  </div>
                   
                   {/* Mobile Submenu */}
                   {item.submenu.length > 0 && activeDropdown === item.name && (

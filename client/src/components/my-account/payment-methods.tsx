@@ -85,7 +85,7 @@ const PaymentMethods = () => {
     }
   ]
 
-  const getPaymentIcon = (type:string,provider:string) => {
+  const getPaymentIcon = (type:string) => {
     switch (type) {
       case 'Credit Card':
       case 'Debit Card':
@@ -196,7 +196,7 @@ const PaymentMethods = () => {
               <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    {getPaymentIcon(method.type, method.provider)}
+                    {getPaymentIcon(method.type)}
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium text-gray-900 text-sm">{method.name}</span>

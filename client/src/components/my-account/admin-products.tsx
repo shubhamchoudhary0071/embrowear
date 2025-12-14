@@ -3,28 +3,6 @@ import { Plus, Upload, Download, X, Eye } from 'lucide-react';
 import React, { useState } from 'react';
 
 // Define TypeScript interfaces for type safety
-interface Product {
-  product_name: string;
-  description: string;
-  category: string;
-  sku: string;
-  lot_id?: string;
-  listed_price: number;
-  sale_price?: number;
-  discount_percentage?: number;
-  stock_quantity: number;
-  available_sizes?: string;
-  available_colors?: string;
-  features?: string;
-  material?: string;
-  care_instructions?: string;
-  brand?: string;
-  weight?: string;
-  dimensions?: string;
-  tags?: string;
-  status?: string;
-  images?: string;
-}
 
 const AdminProducts: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'single' | 'bulk' | 'manage'>('single');

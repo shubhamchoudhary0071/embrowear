@@ -61,7 +61,7 @@ const CategoriesNavigation = () => {
             {/* Categories - Horizontal Scroll */}
             <div className="flex-1 overflow-hidden">
               <div className="flex items-center space-x-4 lg:space-x-6 overflow-x-auto scrollbar-hide pb-1">
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryClick(category)}

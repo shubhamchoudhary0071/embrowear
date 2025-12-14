@@ -1,5 +1,5 @@
 "use client"
-import { X, Heart, ShoppingBag, Grid, List, Search, SlidersHorizontal, Star, Shield } from 'lucide-react'
+import { X, Heart,  Grid, List, Search, Star, Shield } from 'lucide-react'
 import React, { useState } from 'react'
 
 const Wishlist = () => {

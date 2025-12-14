@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface Product {
   id: number
@@ -20,7 +22,8 @@ interface ProductListingProps {
 }
 
 export default function ProductListing({ className = '' }: ProductListingProps) {
-  const [selectedSize, setSelectedSize] = useState<string>('')
+  const [selectedSize, setSelectedSize] = useState<string>('');
+  const router=useRouter();
 
   const sizes = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
@@ -31,7 +34,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1795.00,
       originalPrice: 2395.00,
       isNew: true,
-      image: 'dark-blue',
+      image: '/images/sample1.jpg',
       category: 'shirt'
     },
     {
@@ -40,7 +43,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1795.00,
       originalPrice: 2395.00,
       isNew: true,
-      image: 'cream',
+      image: '/images/sample2.jpg',
       category: 'shirt'
     },
     {
@@ -49,7 +52,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 0,
       isNew: true,
       colors: ['Navy', 'Cream', 'Black'],
-      image: 'navy',
+      image: '/images/sample3.jpg',
       category: 'shirt'
     },
     {
@@ -58,7 +61,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1695.00,
       originalPrice: 2295.00,
       isNew: true,
-      image: 'mustard',
+      image: '/images/sample4.jpg',
       category: 'polo'
     },
     {
@@ -67,7 +70,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1695.00,
       originalPrice: 2295.00,
       isNew: true,
-      image: 'teal',
+      image: '/images/sample5.jpg',
       category: 'polo'
     },
     {
@@ -76,7 +79,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1995.00,
       originalPrice: 2695.00,
       isNew: true,
-      image: 'brown',
+      image: '/images/sample5.jpg',
       category: 'pants'
     },
     {
@@ -85,7 +88,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1495.00,
       originalPrice: 1995.00,
       isNew: true,
-      image: 'olive',
+      image: '/images/sample7.jpg',
       category: 'polo'
     },
     {
@@ -94,7 +97,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1495.00,
       originalPrice: 1995.00,
       isNew: true,
-      image: 'cream-polo',
+      image: '/images/sample8.jpg',
       category: 'polo'
     },
     {
@@ -103,62 +106,46 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
       price: 1495.00,
       originalPrice: 1995.00,
       isNew: true,
-      image: 'black',
+      image: '/images/sample9.jpg',
       category: 'polo'
     },
-    {
-      id: 10,
-      name: 'Fahrenheit Jockey Collar',
-      price: 1495.00,
-      originalPrice: 1995.00,
-      isNew: true,
-      image: 'brown-polo',
-      category: 'polo'
-    },
-    {
-      id: 11,
-      name: 'Vertical Stripe Pique Polo',
-      price: 1195.00,
-      originalPrice: 1595.00,
-      isNew: true,
-      image: 'yellow-stripe',
-      category: 'polo'
-    },
-    {
-      id: 12,
-      name: 'Vertical Stripe Pique Polo',
-      price: 1195.00,
-      originalPrice: 1595.00,
-      isNew: true,
-      image: 'white-stripe',
-      category: 'polo'
-    }
+    // {
+    //   id: 10,
+    //   name: 'Fahrenheit Jockey Collar',
+    //   price: 1495.00,
+    //   originalPrice: 1995.00,
+    //   isNew: true,
+    //   image: 'brown-polo',
+    //   category: 'polo'
+    // },
+    // {
+    //   id: 11,
+    //   name: 'Vertical Stripe Pique Polo',
+    //   price: 1195.00,
+    //   originalPrice: 1595.00,
+    //   isNew: true,
+    //   image: 'yellow-stripe',
+    //   category: 'polo'
+    // },
+    // {
+    //   id: 12,
+    //   name: 'Vertical Stripe Pique Polo',
+    //   price: 1195.00,
+    //   originalPrice: 1595.00,
+    //   isNew: true,
+    //   image: 'white-stripe',
+    //   category: 'polo'
+    // }
   ]
 
-  const getProductImage = (imageType: string) => {
-    const imageMap: { [key: string]: string } = {
-      'dark-blue': 'bg-slate-700',
-      'cream': 'bg-stone-200',
-      'navy': 'bg-slate-800',
-      'mustard': 'bg-yellow-600',
-      'teal': 'bg-teal-600',
-      'brown': 'bg-amber-800',
-      'olive': 'bg-green-700',
-      'cream-polo': 'bg-stone-300',
-      'black': 'bg-black',
-      'brown-polo': 'bg-amber-700',
-      'yellow-stripe': 'bg-gradient-to-r from-yellow-400 to-orange-400',
-      'white-stripe': 'bg-gradient-to-r from-gray-200 to-blue-200'
-    }
-    return imageMap[imageType] || 'bg-gray-300'
-  }
+
 
   const formatPrice = (price: number) => {
     return `₹${price.toFixed(2)}`
   }
 
   return (
-    <div className={`bg-white ${className}`}>
+    <div className={`bg-white ${className} mb-10`}>
       {/* Size Selector Section */}
       <div className="bg-slate-700 text-white py-12 mb-8">
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -195,20 +182,22 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
         {/* Product Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {products.map((product) => (
-            <div key={product.id} className="group cursor-pointer">
+            <div key={product.id} className="group cursor-pointer" onClick={()=>router.push("/product/1")}>
               <div className="relative bg-stone-100 rounded-lg overflow-hidden mb-3 aspect-[3/4]">
-                {/* Product Image Placeholder */}
-                <div className={`w-full h-full ${getProductImage(product.image)} flex items-center justify-center`}>
-                  <div className="w-24 h-32 bg-white/20 rounded-lg"></div>
-                </div>
-                
-                {/* New Badge */}
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+
                 {product.isNew && (
                   <Badge className="absolute top-3 left-3 bg-white text-slate-700 hover:bg-white">
                     New!
                   </Badge>
                 )}
               </div>
+
 
               {/* Product Info */}
               <div className="space-y-1">
@@ -238,6 +227,7 @@ export default function ProductListing({ className = '' }: ProductListingProps) 
         {/* Shop All Button */}
         <div className="text-center">
           <Button 
+          onClick={()=>router.push("/product-category")}
             className="bg-slate-800 hover:bg-slate-700 text-white px-8 py-2 font-medium"
           >
             SHOP ALL

@@ -13,7 +13,7 @@ const BrandStoryPage = () => {
               Every brand has a story.
             </h1>
             <h2 className="text-3xl md:text-4xl font-semibold text-slate-700">
-              Here's ours.
+              Here&apsos;s ours.
             </h2>
           </div>
 
@@ -67,7 +67,7 @@ const BrandStoryPage = () => {
                     </p>
                     
                     <p className="text-lg">
-                      Whether you're hanging out with your mates, waxing eloquent on a zoom call, or even going out for a date night, there's a Fahrenheit for every occasion.
+                      Whether you&apos;re hanging out with your mates, waxing eloquent on a zoom call, or even going out for a date night, there&apos;s a Fahrenheit for every occasion.
                     </p>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ const BrandStoryPage = () => {
                   </h3>
                   
                   <p className="text-lg text-slate-700 leading-relaxed">
-                    Our vision is to leave behind a superior brand that's made in India, a brand that's unflinching in its commitment to{' '}
+                    Our vision is to leave behind a superior brand that&apos;s made in India, a brand that&apos;s unflinching in its commitment to{' '}
                     <span className="font-semibold text-amber-600">quality and innovation</span>.
                   </p>
                 </div>

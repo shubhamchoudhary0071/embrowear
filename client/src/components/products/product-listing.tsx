@@ -1,17 +1,30 @@
-"use client"
+"use client";
+
 import React, { useState } from 'react';
 import { Heart, ShoppingCart, Eye } from 'lucide-react';
+import Image from 'next/image';
 
-const ProductGrid = () => {
-  const [hoveredProduct, setHoveredProduct] = useState(null);
+type Product = {
+  id: number;
+  name: string;
+  price: number | null;
+  priceText: string;
+  taxText?: string; // Optional, since not all products have it
+  image: string;
+  isLarge: boolean;
+  pattern: 'geometric' | 'tribal' | 'leaf' | 'floral' | 'nautical';
+};
 
-  const products = [
+const ProductGrid: React.FC = () => {
+  const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+
+  const products: Product[] = [
     {
       id: 1,
       name: 'Glass Print Knit Shirt',
       price: null,
       priceText: 'Select options',
-      image: '/api/placeholder/600/800',
+      image: '/images/sample1.jpg',
       isLarge: true,
       pattern: 'geometric'
     },
@@ -21,7 +34,7 @@ const ProductGrid = () => {
       price: 1495.00,
       priceText: '₹1,495.00',
       taxText: 'Inc of Tax',
-      image: '/api/placeholder/400/500',
+      image: '/images/sample2.jpg',
       isLarge: false,
       pattern: 'tribal'
     },
@@ -31,7 +44,7 @@ const ProductGrid = () => {
       price: 1495.00,
       priceText: '₹1,495.00',
       taxText: 'Inc of Tax',
-      image: '/api/placeholder/400/500',
+      image: '/images/sample3.jpg',
       isLarge: false,
       pattern: 'leaf'
     },
@@ -41,7 +54,7 @@ const ProductGrid = () => {
       price: 1495.00,
       priceText: '₹1,495.00',
       taxText: 'Inc of Tax',
-      image: '/api/placeholder/400/500',
+      image: '/images/sample4.jpg',
       isLarge: false,
       pattern: 'floral'
     },
@@ -51,24 +64,14 @@ const ProductGrid = () => {
       price: 1495.00,
       priceText: '₹1,495.00',
       taxText: 'Inc of Tax',
-      image: '/api/placeholder/400/500',
+      image: '/images/sample5.jpg',
       isLarge: false,
       pattern: 'nautical'
     }
   ];
 
-  const getPatternStyles = (pattern) => {
-    const patterns = {
-      geometric: 'bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300',
-      tribal: 'bg-gradient-to-br from-amber-100 via-yellow-200 to-amber-300',
-      leaf: 'bg-gradient-to-br from-green-100 via-green-200 to-green-300',
-      floral: 'bg-gradient-to-br from-pink-100 via-purple-200 to-pink-300',
-      nautical: 'bg-gradient-to-br from-cyan-100 via-blue-200 to-cyan-300'
-    };
-    return patterns[pattern] || 'bg-gray-200';
-  };
 
-  const ProductCard = ({ product, className = '' }) => {
+  const ProductCard: React.FC<{ product: Product; className?: string }> = ({ product, className = '' }) => {
     const isHovered = hoveredProduct === product.id;
 
     return (
@@ -79,36 +82,20 @@ const ProductGrid = () => {
       >
         {/* Product Image */}
         <div className={`relative overflow-hidden ${product.isLarge ? 'aspect-[3/4]' : 'aspect-square'}`}>
-          <div className={`w-full h-full ${getPatternStyles(product.pattern)} flex items-center justify-center`}>
-            {/* Simulated model/shirt */}
-            <div className="relative">
-              {/* Person silhouette for large card */}
-              {product.isLarge && (
-                <div className="w-32 h-48 bg-gradient-to-b from-gray-300 to-gray-400 rounded-full opacity-60"></div>
-              )}
-              
-              {/* Shirt representation */}
-              <div className={`${product.isLarge ? 'w-28 h-20 absolute top-8 left-2' : 'w-16 h-12'} bg-gradient-to-br ${
-                product.pattern === 'geometric' ? 'from-blue-600 to-blue-800' :
-                product.pattern === 'tribal' ? 'from-amber-600 to-amber-800' :
-                product.pattern === 'leaf' ? 'from-green-600 to-green-800' :
-                product.pattern === 'floral' ? 'from-purple-600 to-pink-700' :
-                'from-cyan-600 to-blue-800'
-              } rounded-lg shadow-lg`}>
-                {/* Pattern overlay */}
-                <div className="w-full h-full opacity-30 bg-white rounded-lg" style={{
-                  backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-                                   radial-gradient(circle at 80% 50%, white 1px, transparent 1px)`,
-                  backgroundSize: '8px 8px'
-                }}></div>
-              </div>
-            </div>
-          </div>
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+          />
 
           {/* Hover overlay */}
-          <div className={`absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center space-x-4 transition-opacity duration-300 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}>
+          <div
+            className={`absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center space-x-4 transition-opacity duration-300 ${
+              isHovered ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
             <button className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors">
               <Heart className="w-5 h-5 text-gray-700" />
             </button>
@@ -127,14 +114,16 @@ const ProductGrid = () => {
             {product.name}
           </h3>
           <div className="flex items-center justify-between">
-            {product.price ? (
+            {product.price !== null ? (
               <div className="flex flex-col">
                 <span className="text-lg font-semibold text-gray-900">
                   {product.priceText}
                 </span>
-                <span className="text-sm text-gray-500">
-                  {product.taxText}
-                </span>
+                {product.taxText && (
+                  <span className="text-sm text-gray-500">
+                    {product.taxText}
+                  </span>
+                )}
               </div>
             ) : (
               <span className="text-blue-600 font-medium hover:text-blue-700 cursor-pointer">

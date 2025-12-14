@@ -17,7 +17,7 @@ const ProductFilter: React.FC = () => {
   const [selectedSort, setSelectedSort] = useState<string>('Default');
   const [showOnSale, setShowOnSale] = useState<boolean>(false);
   const [resultCount] = useState<number>(12);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [, setIsMobile] = useState<boolean>(false);
 
   // Check if we're on mobile
   useEffect(() => {

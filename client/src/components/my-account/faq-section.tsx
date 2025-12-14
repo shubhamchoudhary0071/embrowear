@@ -15,7 +15,7 @@ const FAQSection = () => {
                       <ChevronRight className="h-4 w-4 text-gray-500" />
                     </button>
                     <div className="px-4 pb-4 text-sm text-gray-600">
-                      You can track your order by going to "Order History" in your account menu or using the tracking link in your confirmation email.
+                      You can track your order by going to &quot;Order History&quot; in your account menu or using the tracking link in your confirmation email.
                     </div>
                   </div>
                   
@@ -35,7 +35,7 @@ const FAQSection = () => {
                       <ChevronRight className="h-4 w-4 text-gray-500" />
                     </button>
                     <div className="px-4 pb-4 text-sm text-gray-600">
-                      Visit the "Loyalty Program" section to redeem points for discounts, free shipping, or exclusive products.
+                      Visit the &quot;Loyalty Program&quot; section to redeem points for discounts, free shipping, or exclusive products.
                     </div>
                   </div>
                   

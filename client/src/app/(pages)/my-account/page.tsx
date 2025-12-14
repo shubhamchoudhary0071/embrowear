@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 import AccountInformation from '@/components/my-account/account-information';
 import FAQSection from '../../../components/my-account/faq-section';
-import Customize from '../../../components/my-account/customize';
 import AdminProducts from '../../../components/my-account/admin-products';
 import Sidebar from '../../../components/my-account/sidebar';
 import OrderHistory from '@/components/my-account/order-history';
@@ -42,10 +41,10 @@ const UserProfile = () => {
           </div>
         );
 
-      case 'customize':
-        return (
-          <Customize />
-        );
+      // case 'customize':
+      //   return (
+      //     <Customize />
+      //   );
 
       case 'wishlist':
         return (

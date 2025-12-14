@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { Eye, EyeOff, Scissors, Zap, Check } from "lucide-react";
 import Link from "next/link";
@@ -19,8 +20,10 @@ const registerSchema = z
       .regex(/\d/, "Password must contain at least one number"),
     confirmPassword: z.string(),
     phone: z.string().optional(),
-    agreeTerms: z.boolean(),
-    marketingEmails: z.boolean(),
+    agreeTerms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the Terms of Service and Privacy Policy" }),
+    }),
+    marketingEmails: z.boolean().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -33,7 +36,8 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 const SignUpPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const {addToast}=useToast()
+  const { addToast } = useToast();
+
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -41,9 +45,10 @@ const SignUpPage: React.FC = () => {
     password: "",
     confirmPassword: "",
     phone: "",
-    agreeTerms: false,
+    agreeTerms: true,
     marketingEmails: false,
   });
+
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [apiError, setApiError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,45 +72,59 @@ const SignUpPage: React.FC = () => {
     const result = registerSchema.safeParse(formData);
     if (!result.success) {
       const errors = result.error.flatten().fieldErrors;
-      setFormErrors(
-        Object.fromEntries(
-          Object.entries(errors).map(([key, messages]) => [key, messages?.[0] || "Invalid input"])
-        )
-      );
+      const formattedErrors: FormErrors = {};
+      for (const [key, messages] of Object.entries(errors)) {
+        if (messages && messages.length > 0) {
+          formattedErrors[key as keyof FormData] = messages[0];
+        }
+      }
+      setFormErrors(formattedErrors);
       return;
     }
-    const {confirmPassword,agreeTerms,marketingEmails,...payload}=formData
+
+    // Safe to destructure now – validation passed
+    const { confirmPassword, agreeTerms, marketingEmails, ...payload } = result.data;
+
     setIsLoading(true);
     try {
-      // Prepare payload for backend (exclude confirmPassword)
-     
-      const res=await fetch("/api/auth/register",{
-        method:"POST",
-        headers:{
-          "Content-type":"application/json",
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
-      const data=await res.json();
-      if(data.success){
+
+      const data = await res.json();
+      console.log("confirm",{confirmPassword,agreeTerms,marketingEmails});
+
+      if (data.success) {
         addToast({
-          type: 'success',
-          title: 'Success!',
-          description: 'Registered Successfully.',
-          duration: 5000
+          type: "success",
+          title: "Success!",
+          description: "Registered successfully.",
+          duration: 5000,
         });
-      }else{
+      } else {
+        const errorMessage = data.message || data.error || "Registration failed. Please try again.";
+        setApiError(errorMessage);
         addToast({
-          type: 'error',
-          title: 'Error!',
-          description: data,
-          duration: 5000
+          type: "error",
+          title: "Registration Failed",
+          description: errorMessage,
+          duration: 5000,
         });
       }
-     console.log(data)
     } catch (error) {
-      console.log(error)
-      
+      console.log(error);
+      const errorMessage = "Network error. Please check your connection and try again.";
+      setApiError(errorMessage);
+      addToast({
+        type: "error",
+        title: "Error",
+        description: errorMessage,
+        duration: 5000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +140,7 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ backgroundColor: "#F8F6F0" }}>
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-5 opacity-5">
           <Zap size={150} className="text-gray-400" />
         </div>
@@ -139,7 +158,7 @@ const SignUpPage: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
-              <img src="/logos/without-bg/logo.png" className="h-20 w-32" />
+              <img src="/logos/without-bg/logo.png" className="h-20 w-32" alt="EMBROWEAR Logo" />
             </div>
             <h1 className="text-2xl font-bold mb-2" style={{ color: "#2C2C2C" }}>
               Join EMBROWEAR
@@ -216,7 +235,7 @@ const SignUpPage: React.FC = () => {
               {formErrors.email && <p className="text-xs text-red-500 mt-1">{formErrors.email}</p>}
             </div>
 
-            {/* Phone field (optional, added for backend compatibility) */}
+            {/* Phone field */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: "#2C2C2C" }}>
                 Phone Number (Optional)
@@ -225,7 +244,7 @@ const SignUpPage: React.FC = () => {
                 id="phone"
                 name="phone"
                 type="tel"
-                value={formData.phone}
+                value={formData.phone ?? ""}
                 onChange={handleInputChange}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-200 focus:border-transparent outline-none transition-all ${
                   formErrors.phone ? "border-red-500" : "border-gray-200"
@@ -283,11 +302,7 @@ const SignUpPage: React.FC = () => {
 
             {/* Confirm Password field */}
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium mb-2"
-                style={{ color: "#2C2C2C" }}
-              >
+              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2" style={{ color: "#2C2C2C" }}>
                 Confirm Password
               </label>
               <div className="relative">
@@ -319,7 +334,7 @@ const SignUpPage: React.FC = () => {
 
             {/* Agreements */}
             <div className="space-y-3">
-              <label className="flex items-start">
+              <label className="flex items-start cursor-pointer">
                 <input
                   type="checkbox"
                   name="agreeTerms"
@@ -340,9 +355,10 @@ const SignUpPage: React.FC = () => {
                 </span>
               </label>
               {formErrors.agreeTerms && (
-                <p className="text-xs text-red-500 mt-1">{formErrors.agreeTerms}</p>
+                <p className="text-xs text-red-500 -mt-2 ml-7">{formErrors.agreeTerms}</p>
               )}
-              <label className="flex items-start">
+
+              <label className="flex items-start cursor-pointer">
                 <input
                   type="checkbox"
                   name="marketingEmails"
@@ -351,7 +367,7 @@ const SignUpPage: React.FC = () => {
                   className="rounded border-gray-300 text-amber-600 focus:ring-amber-200 mt-1"
                 />
                 <span className="ml-3 text-sm text-gray-600">
-                  I'd like to receive updates about new embroidery designs and special offers
+                  I&apos;d like to receive updates about new embroidery designs and special offers
                 </span>
               </label>
             </div>
@@ -362,7 +378,7 @@ const SignUpPage: React.FC = () => {
             {/* Sign up button */}
             <button
               type="submit"
-              disabled={isLoading || !formData.agreeTerms || formData.password !== formData.confirmPassword}
+              disabled={isLoading}
               className="w-full py-3 px-4 rounded-lg text-white font-medium transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               style={{ backgroundColor: "#8B4513" }}
             >
@@ -384,22 +400,10 @@ const SignUpPage: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <button className="flex items-center justify-center px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
               <span className="text-sm font-medium text-gray-700">Google</span>
             </button>
@@ -415,11 +419,7 @@ const SignUpPage: React.FC = () => {
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="font-medium hover:underline transition-colors"
-                style={{ color: "#8B4513" }}
-              >
+              <Link href="/login" className="font-medium hover:underline transition-colors" style={{ color: "#8B4513" }}>
                 Sign in here
               </Link>
             </p>

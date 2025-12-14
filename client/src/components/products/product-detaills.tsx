@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Plus, Minus, Facebook, Twitter, Instagram, Heart, Share2, RotateCcw, Truck, Shield, Users } from 'lucide-react';
+import {  Plus, Minus, Facebook, Twitter, Instagram, Heart, Share2, RotateCcw, Truck, Shield, Users } from 'lucide-react';
+import Image from 'next/image';
 
 const ProductPage = () => {
   const [selectedSize, setSelectedSize] = useState('');
@@ -8,30 +9,37 @@ const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
 
   const productImages = [
-    '/api/placeholder/600/700', // Main product image
-    '/api/placeholder/600/700', // Alternative views
-    '/api/placeholder/600/700',
-    '/api/placeholder/600/700',
-    '/api/placeholder/600/700',
-    '/api/placeholder/600/700',
-    '/api/placeholder/600/700'
+    '/images/sample1.jpg', // Main product image
+    '/images/sample2.jpg',
+    '/images/sample3.jpg',
+    '/images/sample4.jpg',
+    '/images/sample5.jpg',
+    '/images/sample7.jpg',
+    '/images/sample8.jpg',
+    '/images/sample9.jpg'
   ];
 
   const sizes = ['M', 'L', 'XL', '2XL'];
 
-  const thumbnails = Array(7).fill(null).map((_, index) => (
-    <div
-      key={index}
-      className={`w-16 h-20 bg-yellow-100 rounded-lg cursor-pointer border-2 transition-all ${
-        selectedImage === index ? 'border-yellow-400' : 'border-gray-200 hover:border-gray-300'
-      }`}
-      onClick={() => setSelectedImage(index)}
-    >
-      <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-300 rounded-md flex items-center justify-center">
-        <div className="text-white text-xs font-medium">{index + 1}</div>
-      </div>
-    </div>
-  ));
+const thumbnails = productImages.map((image, index) => (
+  <button
+    key={index}
+    onClick={() => setSelectedImage(index)}
+    className={`relative w-16 h-20 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+      selectedImage === index
+        ? 'border-yellow-400'
+        : 'border-gray-200 hover:border-gray-300'
+    }`}
+  >
+    <Image
+      src={image}
+      alt={`Product thumbnail ${index + 1}`}
+      fill
+      className="object-cover"
+    />
+  </button>
+))
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,24 +62,20 @@ const ProductPage = () => {
           <div className="space-y-4">
             <div className="relative">
               <div className="aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 flex items-center justify-center">
-                  {/* Seagull silhouettes */}
-                  <div className="absolute inset-0 opacity-20">
-                    {Array(12).fill(null).map((_, i) => (
-                      <div
-                        key={i}
-                        className="absolute w-8 h-6 bg-white transform rotate-12"
-                        style={{
-                          left: `${20 + (i % 4) * 20}%`,
-                          top: `${15 + Math.floor(i / 4) * 25}%`,
-                          clipPath: 'polygon(20% 0%, 0% 20%, 30% 50%, 70% 50%, 100% 20%, 80% 0%)'
-                        }}
-                      />
-                    ))}
-                  </div>
-                  {/* Person silhouette */}
-                  <div className="w-48 h-64 bg-gray-300 rounded-lg opacity-40"></div>
-                </div>
+                <div className="aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden relative">
+                <Image
+                  src={productImages[selectedImage]}
+                  alt="Product image"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+
+                <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
+                  <Plus className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+
                 <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
                   <Plus className="w-5 h-5 text-gray-600" />
                 </button>

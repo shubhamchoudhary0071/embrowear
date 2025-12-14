@@ -2,6 +2,7 @@
 
 import { Mail, Phone, Facebook, Instagram, Youtube, ArrowUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 interface FooterProps {
   className?: string
@@ -11,6 +12,8 @@ export default function Footer({ className = '' }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const router=useRouter();
 
   return (
     <footer className={`bg-slate-700 text-white ${className}`}>
@@ -105,13 +108,10 @@ export default function Footer({ className = '' }: FooterProps) {
               </li>
             </ul>
 
-            <div className="mt-8">
-              <a 
-                href="#" 
-                className="text-white font-medium underline hover:no-underline transition-all"
-              >
+            <div className="mt-8 cursor-pointer" onClick={()=>router.push("/product-category")}>
+              
                 Shop All
-              </a>
+              
             </div>
           </div>
 
